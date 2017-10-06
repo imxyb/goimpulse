@@ -20,7 +20,7 @@
 
 ## 基本架构
 
-![Alt text](http://static.qiziwang.net/0C582C74-87E3-4245-9AC7-E5DAAB73C1BF.png)
+![Alt text](http://static.qiziwang.net/9C91454D-3514-428D-AF5A-55F1E181450C.png)
 
 ## 安装
 
