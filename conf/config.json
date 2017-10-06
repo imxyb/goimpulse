@@ -1,0 +1,18 @@
+{
+  "app":{
+    "host": "127.0.0.1:9099"
+  },
+  "etcd": {
+    "host": "http://127.0.0.1:2379"
+  },
+  "type": ["order", "user", "kill"],
+  "auth": {
+    "user": "admin",
+    "pass": "admin",
+    "enable": false
+  },
+  "node_manager":{
+    "host": "127.0.0.1:9199"
+  },
+  "batch": 100
+}
