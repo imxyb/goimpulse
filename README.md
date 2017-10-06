@@ -20,7 +20,7 @@
 
 ## 基本架构
 
-![Alt text](http://static.qiziwang.net/9C91454D-3514-428D-AF5A-55F1E181450C.png)
+![Alt text](http://static.qiziwang.net/8BCBBC07-8E6D-444C-B1C2-AA78CD300E53.png)
 
 ## 安装
 
@@ -46,16 +46,17 @@
 
 example:
 
-`
-
+```json
  {
 
  "code": 0,
-  "id": 19,
-  "msg": "success"
-}
 
-`
+  "id": 19,
+
+  "msg": "success"
+
+}
+```
 
 code为0表示成功，id则为结果
 
