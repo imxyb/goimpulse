@@ -39,7 +39,16 @@ func main() {
 		}
 
 		query := req.URL.Query()
-		seq, ok := business[query.Get("type")]
+
+		var seq *sender.Sequence
+		var ok bool
+		typeName := query.Get("type")
+		if typeName == "" {
+			seq, ok = business["default"]
+		} else {
+			seq, ok = business[query.Get("type")]
+		}
+
 		if !ok {
 			result["code"] = -1
 			result["msg"] = "not found this type"

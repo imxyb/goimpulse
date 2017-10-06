@@ -40,7 +40,13 @@
 
 ## 使用
 
+url地址：
+
 `GET http://node_managerhost/getid`
+
+参数 
+
+type: 业务标识，若传空则为default
 
 返回json 
 
