@@ -64,6 +64,8 @@ code为0表示成功，id则为结果
 
 配置放在`./conf/config.json`中
 
+`etcd.host`：etcd的host和端口，数组形式表示多个
+
 `app.host`：表示goimpulse的host和端口
 
 `node_manager.host`：表示node_manager的host和端口

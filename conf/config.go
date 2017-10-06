@@ -13,7 +13,7 @@ type Config struct {
 	} `json:"app"`
 
 	Etcd struct {
-		Host string `json:"host"`
+		Host []string `json:"host"`
 	} `json:"etcd"`
 
 	Type []string `json:"type"`

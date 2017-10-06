@@ -9,7 +9,7 @@ import (
 
 func GetEtcd() client.Client {
 	cfg := client.Config{
-		Endpoints: []string{conf.Cfg.Etcd.Host},
+		Endpoints: conf.Cfg.Etcd.Host,
 	}
 	c, _ := client.New(cfg)
 	return c
