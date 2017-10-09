@@ -8,7 +8,7 @@ import (
 )
 
 type Config struct {
-	App struct{
+	App struct {
 		Host string `json:"host"`
 	} `json:"app"`
 
@@ -20,13 +20,13 @@ type Config struct {
 
 	Batch int `json:"batch"`
 
-	Auth struct{
-		User string `json:"user"`
-		Pass string `json:"pass"`
-		Enable bool `json:"enable"`
+	Auth struct {
+		User   string `json:"user"`
+		Pass   string `json:"pass"`
+		Enable bool   `json:"enable"`
 	} `json:"auth"`
 
-	NodeManager struct{
+	NodeManager struct {
 		Host string `json:"host"`
 	} `json:"node_manager"`
 }
@@ -34,6 +34,10 @@ type Config struct {
 var Cfg *Config
 
 func init() {
+	LoadConfig()
+}
+
+func LoadConfig() {
 	Cfg = &Config{}
 
 	_, filename, _, _ := runtime.Caller(0)

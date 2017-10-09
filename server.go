@@ -6,10 +6,8 @@ import (
 	"goimpulse/sender"
 	"net/http"
 
-	"io"
-
-	"encoding/json"
-
+	"github.com/facebookgo/grace/gracehttp"
+	"github.com/labstack/echo"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -21,59 +19,63 @@ func main() {
 	log.SetLevel(log.InfoLevel)
 	lib.RegisterSelf()
 
-	http.HandleFunc("/getid", func(w http.ResponseWriter, req *http.Request) {
+	lib.OnReload()
+
+	result := map[string]interface{}{
+		"id":   -1,
+		"code": 0,
+		"msg":  "success",
+	}
+
+	e := echo.New()
+	e.GET("/getid", func(c echo.Context) error {
 		if !service {
-			return
+			result["code"] = -1
+			result["msg"] = "service offline"
+			return c.JSON(http.StatusInternalServerError, result)
 		}
 
-		if !lib.CheckAuth(w, req) {
-			return
+		if !lib.CheckAuth(c.Request()) {
+			result["id"] = -1
+			result["code"] = -1
+			result["msg"] = "auth failed"
+			return c.JSON(http.StatusForbidden, result)
 		}
-
-		w.Header().Add("Content-type", "application/json")
-
-		result := map[string]interface{}{
-			"id":   -1,
-			"code": 0,
-			"msg":  "success",
-		}
-
-		query := req.URL.Query()
 
 		var seq *sender.Sequence
 		var ok bool
-		typeName := query.Get("type")
+
+		typeName := c.QueryParam("type")
+
 		if typeName == "" {
 			seq, ok = business["default"]
 		} else {
-			seq, ok = business[query.Get("type")]
+			seq, ok = business[typeName]
 		}
 
 		if !ok {
 			result["code"] = -1
 			result["msg"] = "not found this type"
-			data, _ := json.Marshal(result)
-			http.Error(w, string(data), http.StatusNotFound)
-			return
+			return c.JSON(http.StatusNotFound, result)
 		}
 
 		id, ok := seq.GetId().(int64)
 		if !ok {
 			result["code"] = -1
 			result["msg"] = "etcd error"
-			data, _ := json.Marshal(result)
-			http.Error(w, string(data), http.StatusNotFound)
+			return c.JSON(http.StatusInternalServerError, result)
 		}
 
+		result["code"] = 0
+		result["msg"] = "success"
 		result["id"] = id
-		data, _ := json.Marshal(result)
-		io.WriteString(w, string(data))
+		return c.JSON(http.StatusOK, result)
 	})
 
-	err := http.ListenAndServe(conf.Cfg.App.Host, nil)
-	if err != nil {
-		log.Fatal("ListenAndServe: ", err)
-	}
+	lib.LogPid(conf.Cfg.App.Host)
+	e.Server.Addr = conf.Cfg.App.Host
+	e.Server.SetKeepAlivesEnabled(false)
+	e.Logger.Fatal(gracehttp.Serve(e.Server))
 }
 
 func serviceInit() {
